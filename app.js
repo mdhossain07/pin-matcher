@@ -1,4 +1,7 @@
+let count = 3;
 var display = document.getElementById('display-pin');
+const action = document.getElementById('action');
+const submitButton = document.getElementById('submit');
 
 function generatePin(){
     const pin = Math.round((Math.random() * 10000));
@@ -7,47 +10,61 @@ function generatePin(){
     if (pinNumber.length < 4){
         generatePin();
     }
-    else{
+
+    else {
         display.value = pinNumber;
     }
 }
 
-
-const typedNumbers = document.getElementById('typed-numbers')
-document.getElementById('key-pad').addEventListener('click', function(event){
-    let keyNumber = event.target.innerText;
-
-    if(keyNumber == 'C'){
-        typedNumbers.value = '';
+function reduce(){
+    count--;
+    action.innerText = count;
+    if (count == 0){
+        submitButton.style.display = 'none';
     }
+}
 
-    else if(keyNumber == 'Submit'){
-        typedNumbers.value ;
-    }
+const typedNumbers = document.getElementById('typed-numbers');
+let keypad = document.querySelectorAll('.button');
+let screenValue = [];
 
-    else {
-        typedNumbers.value += keyNumber;
-    }
-    
-})
+for (let item of keypad) {
+    item.addEventListener('click', function(event){
+        let keyNumber = event.target.innerText; 
+        screenValue.push(keyNumber);
+        
+        if (keyNumber == 'C'){
+            typedNumbers.value = '';
+            // screenValue = '';
+            // typedNumbers.value = screenValue;
+        }
+            
+        else {
+            typedNumbers.value += keyNumber;
+            // screenValue += keyNumber;
+            // typedNumbers.value = screenValue;
+        }
+    })
+}
+
 
 function verifyPin(){
     const pinNumber = document.getElementById('display-pin').value;
     const typedNumbers = document.getElementById('typed-numbers').value;
     let successMessage = document.getElementById('notify-success');
-    let failError = document.getElementById('notify-fail');
-
-    if (pinNumber === typedNumbers){
+    const failError = document.getElementById('notify-fail');
+ 
+    if (pinNumber == typedNumbers){
         successMessage.style.display = 'block';
         failError.style.display = 'none';
     }
 
-    else{
+    else {
         failError.style.display = 'block';
         successMessage.style.display = 'none';
+        reduce();
     }
 
 }
 
-// const show = document.querySelector('.notify-section');
-// show.style.display = 'none';
+
